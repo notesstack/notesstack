@@ -1,0 +1,21 @@
+{
+	"name": "notesstack",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"express": "3.2.6",
+		"mongodb": "0.9.7",
+		"mongoose": "2.4.9"
+	},
+	"devDependencies": {
+		"mocha": "1.15.1",
+		"supertest": "0.8.2"
+	},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.3.x"
+  }
+}
