@@ -1,0 +1,50 @@
+.md-editor{
+    display:block;
+}
+.md-editor>.md-header,.md-editor .md-footer{
+    background:#fff
+}
+
+.md-header {
+    position: absolute;
+    margin-left: 600px;
+    margin-top: -100px;
+ }
+
+.md-button {
+    background-color: #5BBE86;
+    color: #ffffff;
+    border: none;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+.md-header .el-icon-bold, .md-header .el-icon-italic, .md-header .el-icon-font, .md-header .el-icon-globe, .md-header .el-icon-picture, .md-header .el-icon-list, .md-header .el-icon-search {
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.md-editor>.md-preview{
+    background:#fff;
+    border-top:1px dashed #ddd;
+    border-bottom:1px dashed #ddd;
+    min-height:10px
+}
+
+.md-editor>textarea{
+    font-family: 'Noto Serif';
+    font-size:14px;
+    display:block;
+    padding:0;
+    width:100%;
+    border:10px solid white;
+    background:#ffffff;
+}
+
+
+.md-editor>textarea:focus{box-shadow:none;
+    background:#fff
+}
+.md-editor.active{
+ }

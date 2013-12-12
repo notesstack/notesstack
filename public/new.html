@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en-US" ng-app="newNote">
+<head>
+  <meta charset="UTF-8">
+  <title>Notesstack</title>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/bootstrap-markdown.min.css" />
+    <link rel="stylesheet" href="css/Elusive-icons.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+</head>
+
+<body>
+    <div ng-controller="newNoteController">
+        <div class="page-header">
+            <header>
+                <div id="fixed-nav">
+                    <img src="img/buildboot.jpg" alt="home" class="home"/>
+                    <input type="search" class="searchbox"> <i class="el-icon-search searchboxicon"></i>
+                    <div id="navbuttons">
+                        <button id="publish" class="button">Publish</button>
+                    </div>
+                </div>
+                <div id="logo"> <h1> N O T E S S T A C K </h1> </div>
+            </header>
+        </div>
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+               <form>
+                   <fieldset>
+                        <input id="Headline" type="text" placeholder="Headline" class="headline"> <br />
+                        <input id="subHeadline" type="text" placeholder="Sub-headline" class="subHeadline">
+                        <textarea data-provide="markdown" rows="15" id="content" placeholder="Start writing here"> </textarea>
+                       <label>Footnotes:</label> <br/>
+                       <textarea rows="3" id="newfootnote" placeholder="Footnote" > </textarea>
+                       <label>Type your tags here:</label> <br/>
+                       <input id="newtags" type="text" placeholder="Tags" rows="2" class="tags"> <br /><br />
+                       <label>Select a Category</label>
+                       <select id="categories">
+                           <option value="Reports">Reports</option>
+                           <option value="Current">Current</option>
+                           <option value="Analysis">Analysis</option>
+                           <option value="Learning">Learning</option>
+                           <option value="Papers">Papers</option>
+                           <option value="Ideas">Ideas</option>
+                           <option value="Inspiration">Inspiration</option>
+                           <option value="Diary">Diary</option>
+                           <option value="Special Interest">Special Interest</option>
+                           <option value="Non-fiction">Non-fiction</option>
+                           <option value="Real stories">Real Stories</option>
+                           <option value="Know-how">Know-how</option>
+                           <option value="Fiction">Fiction</option>
+                           <option value="Poetry">Poetry</option>
+                           <option value="Quotes">Quotes</option>
+                       </select> <br />
+                   </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script src="js/markdown.js"></script>
+<script src="js/app.js"></script>
+<script src="lib/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="js/jquery.cloudinary.js"></script>
+<script src="lib/bootstrap.js"></script>
+<script src="js/bootstrap-markdown.js"></script>
+<script src="lib/angular/angular.min.js"></script>
+
+    <script type="text/javascript">
+
+        $('#publish').click(function(){
+          var categories = $('#categories').val();
+          var sendInfo = {
+              title: $('#Headline').val(),
+              sub_title: $('#subHeadline').val(),
+              content: $('#content').val(),
+              tags:$('#newtags').val() ,
+              categories: categories,
+              footnote:$('#newfootnote').val() ,
+              restacked: 0
+          };
+           $.ajax({
+               type: 'POST',
+               url: 'http://localhost:3000/update/new',
+               data: sendInfo,
+               cache: false,
+               success: function(){alert('success');},
+               dataType: 'json'
+           });
+
+       });
+
+    </script>
+</body>
+</html>
