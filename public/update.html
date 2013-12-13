@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-US" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Notesstack</title>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:900,300italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/Elusive-icons.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+<script src="lib/angular/angular.min.js"></script>
+<div ng-controller = "updateCntrl">
+    <div class="page-header">
+        <header>
+            <img src="img/buildboot.jpg" alt="home" class="home"/>
+            <input type="search" class="searchbox"> <i class="el-icon-search searchboxicon"></i>
+            <div id="navbuttons">
+                <button class="button">Write</button>
+                <button class="button" id="login">Login</button>
+                <div id="loginform" style="display: none;">
+                    <input type="text" id="loginemail" placeholder="Email"> <br />
+                    <input type="password" id="loginpassword" placeholder="Password"> <br />
+                    <input type="checkbox" checked class="terms" > Keep me logged in <br />
+                    <button id="login2">Login </button> <br />
+                </div>
+                <button class="button" id="signup">Sign Up</button>     <br />
+                <div id="signupform" style="display: none;">
+                    <input type="email" id="signupemail" placeholder="Email"> <br />
+                    <input type="password" id="signuppassword" placeholder="Password"> <br />
+                    <input type="password" id="reenterpassword" placeholder="Re enter Password"><br />
+                    <input type="checkbox" checked class="terms" > Accept Terms and Conditions <br />
+                    <button id="signup2">Sign Up </button> <br />
+                </div>
+            </div>
+            <div id="logo"> <h1> N O T E S S T A C K </h1> </div>
+        </header>
+    </div>
+    <div class="update" ng-repeat="update in updates | limitTo: 1">
+        <h6 class="updateuser"> by {{update.user}} </h6>
+        <div id="updatesidepanel">
+            <p><i class="el-icon-file"></i> 3 pages</p>     <br />
+            <i class="el-icon-tag"></i>
+            <ul class="btag"><li ng-repeat= "tag in update.tags">{{tag}}</li></ul> <br />
+            <p><i class="el-icon-filter"></i>Analysis</p> <br />
+        </div>
+        <h3 class="updatetitle"> {{ update.title}} </h3>
+        <h4 class="updatesubtitle"> {{ update.subtitle}} </h4>
+        <p class="updatebody"> {{ update.body }} </p>
+        <p class="updatefootnote"> {{ update.footnote }} </p>
+        <div id="updateiconpanel">
+            <table>
+                <tr>
+                    <td><i class="el-icon-align-justify"></i></td>
+                    <td><i class="el-icon-thumbs-up"></i></td>
+                    <td><i class="el-icon-comment"></i></td>
+                    <td><i class="el-icon-share"></i></td>
+                </tr>
+                <tr>
+                    <td>Restack</td>
+                    <td>Like</td>
+                    <td>Comment</td>
+                    <td>Share</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="lib/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="js/jquery.cloudinary.js"></script>
+<script src="js/app.js"></script>
+<script src="lib/bootstrap.js"></script>
+<script src="js/controllers/updateCntrl.js"></script>
+
+</body>
+</html>

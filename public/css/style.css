@@ -1,0 +1,355 @@
+body {
+    font-family: 'Noto Serif', serif;
+}
+
+#logo h1 {
+    font-family: 'lato', serif;
+    font-weight: 400;
+    text-align: center;
+    color: #000000;
+    padding-bottom: 30px;
+}
+
+.page-header {
+    border: none;
+}
+
+.panel {
+    text-align: left;
+    border: none;
+    left: 46%;
+    position: fixed;
+    height: 500px;
+    width: 120px;
+    margin-left: -30%;
+}
+
+#stream i , p {
+    display: inline-block;
+}
+
+.panel h6 {
+    font-family: 'Noto Serif';
+    font-size: 100%;
+}
+
+#tags, #discover {
+    padding-top: 15%;
+}
+
+.el-icon-tags, .el-icon-magnet, .el-icon-filter {
+    font-size: 200%;
+    margin-left: 40%;
+}
+
+.panel h4 {
+    font-weight: bolder;
+    color: #000000;
+    font-size: 150%;
+    text-align: center;
+    font-family: 'Noto Serif';
+}
+
+.updates{
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+    color: #000000;
+    padding-left: 10%;
+}
+
+
+.headline, .subHeadline {
+    padding-bottom: 20px;
+    border: none;
+    width: 500px;
+    padding-left: 12px;
+}
+
+.headline {
+    font-weight: bold;
+    color: #000;
+    font-size: 200%;
+}
+.subHeadline {
+    font-style: italic;
+    color: #000;
+    font-size: 120%;
+}
+
+
+.updates .title {
+    font-weight: 700;
+    padding-bottom: 10px;
+    font-size: 220%;
+    font-family: 'Noto Serif';
+    text-align: justify;
+}
+
+.updates .subtitle {
+    font-style: italic;
+    padding-bottom: 20px;
+    font-family: 'Noto Serif';
+    font-size: 130%;
+    text-align: justify;
+}
+#bluepanel {
+    border-bottom: 8px solid black;
+    margin-top: -20px;
+    padding-left: 20px;
+}
+
+#bluepanel .el-icon-filter, .el-icon-tag, .el-icon-file {
+    color: #30A3DC;
+    font-size: 150%;
+}
+
+.el-icon-tag {
+    padding-left: 15px;
+}
+
+.btag li{
+    line-height: 1;
+    list-style: none;
+    display: block;
+    text-transform: capitalize;
+}
+
+.btag {
+    line-height: 1;
+    vertical-align: middle;
+    margin-left: -35px;
+    display: inline-block;
+}
+
+#greenpanel td{
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+#greenpanel {
+    padding-top: 10px;
+ }
+
+
+#greenpanel .el-icon-comment, .el-icon-thumbs-up, .el-icon-align-justify {
+    color: #5BBE86;
+    font-size: 180%;
+}
+
+.user {
+    float: left;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+#followpanel{
+    float: right;
+    margin-top: -60px;
+}
+
+.btn-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    float:right;
+}
+
+.tagnames {
+    text-transform: capitalize;
+    padding-left: 35px;
+}
+
+a {
+    color: black;
+}
+
+.alltags {
+    padding-left: 20px;
+    text-decoration: underline;
+}
+
+.headline::-moz-placeholder, .subHeadline::-moz-placeholder, #content::-moz-placeholder, #newfootnote::-moz-placeholder{
+    color: #000000;
+    opacity: 1;
+}
+.headline::-ms-input-placeholder, .subHeadline::-ms-input-placeholder, #content::-ms-input-placeholder, #newfootnote::-ms-input-placeholder{
+    color: #000000;
+    opacity: 1;
+}
+.headline::-webkit-input-placeholder, .subHeadline::-webkit-input-placeholder, #content::-webkit-input-placeholder, #newfootnote::-webkit-input-placeholder{
+    color: #000000;
+    opacity: 1;
+}
+
+/*** Header Styles ****/
+.page-header .button {
+    background-color: #5BBE86;
+    border-radius: 10px;
+    border: none;
+    margin-right: 5px;
+    width: 70px;
+    color: #ffffff;
+}
+
+#navbuttons {
+    float:right;
+    position: absolute;
+    top:5px;
+    right: 15px;
+}
+
+/*** Signup Signin forms ***/
+
+#signupform, #loginform {
+    position: absolute;
+    top: 30px;
+    width: 220px;
+    line-height: 2;
+}
+
+#signupform button, input{
+    border-radius: 10px;
+    width: 200px;
+    border: 1px black solid;
+}
+
+#signupform button {
+    background-color: #5BBE86;
+    color: #ffffff;
+}
+#loginform button, input{
+    border-radius: 10px;
+    width: 200px;
+    border: 1px black solid;
+}
+
+#loginform button {
+    background-color: #5BBE86;
+    color: #ffffff;
+}
+
+.home {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    width: 80px;
+}
+
+.searchbox {
+    position: absolute;
+    left: 100px;
+    top: 10px;
+    width: 230px;
+}
+
+.searchboxicon {
+    position: absolute;
+    left: 310px;
+    top: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #999999;
+}
+
+#fixed-nav {
+    position: fixed;
+    top:0;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+/***** Update styles ********/
+
+.updateuser {
+    width: 100%;
+    text-align: center;
+    color: #000000;
+    font-size: 120%;
+    font-family: 'lato';
+    margin-top: -65px;
+}
+
+.update {
+    margin-left: 24%;
+    margin-right: 24%;
+    width: 52%;
+    text-align: justify;
+}
+
+.update h3, h4, p {
+    font-family: 'Noto Serif';
+    color: #000000;
+}
+
+.updatetitle {
+    font-weight: 700;
+}
+
+.updatesubtitle {
+    font-style: italic;
+    padding-bottom: 20px;
+}
+
+.updatebody {
+    font-size: 120%;
+}
+
+.updatefootnote{
+    border-top: 2px #000000 solid;
+    border-bottom: 2px #000000 solid;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+#updateiconpanel .el-icon-comment, .el-icon-thumbs-up, .el-icon-align-justify, .el-icon-share {
+    color: #5BBE86;
+    font-size: 300%;
+}
+
+
+#updateiconpanel table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    margin-left: -10px;
+    margin-top: 20px;
+}
+
+#updateiconpanel table td {
+    font-size: 100%;
+}
+
+#updatesidepanel {
+    display: block;
+    float: right;
+    text-align: center;
+    margin-left: -40px;
+}
+
+
+#updatesidepanel .el-icon-filter, .el-icon-tag, .el-icon-file {
+    font-size: 150%;
+    color: #30A3DC;
+}
+#updatesidepanel .el-icon-filter {
+   margin-left: 0px;
+}
+
+/******new update styles *****/
+#newtags, #newfootnote {
+    width: 500px;
+    border-radius: 0;
+}
+
+#newfootnote {
+    border: 5px solid #ffffff;
+}
+
+#newfootnote::-webkit-input-placeholder, .subHeadline::-webkit-input-placeholder{
+    color: #000000;
+    opacity: 1;
+}

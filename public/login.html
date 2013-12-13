@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="project">
+<head>
+    <title>Search form with AngualrJS</title>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js"></script>
+    <script src="login.js"></script>
+    <script src="app.js"></script>
+
+</head>
+
+<body>
+<div ng-controller="loginCtrl">
+    <form class="well form-search">
+        <label>Login:</label>
+        <input type="text" ng-model="user" class="input-medium search-query" placeholder="username">
+        <input type="text" ng-model="pass" class="input-medium search-query" placeholder="password">
+        <button type="submit" class="btn" ng-click="login()">Login</button>
+    </form>
+<pre ng-model="result">
+{{result}}
+</pre>
+</div>
+</body>
+
+</html>
