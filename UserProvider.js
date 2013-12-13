@@ -70,8 +70,8 @@ UserProvider.prototype.signup = function(email, username, password, callback)	{
 					}
 					else
 					{
-						callback({RESULT_CODE:'1', MESSAGE:'User registered'});
-					}
+						callback({RESULT_CODE:'1', MESSAGE:'User registered', DATA:result});
+					} 
 				});
 			}
 			else
@@ -199,12 +199,12 @@ UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, t
 		{
 			var update = new Post({uid: uid, title: title, sub_title: sub_title, content:content, tags:tags, categories: categories,
 													restacked: restacked, created_at: created_at});
-			result.save(function(err)	{
+			result.save(function(err, result)	{
 				if(err){
 					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 				}
 				else	{
-					callback({RESULT_CODE:'1', MESSAGE:'Update created'});
+					callback({RESULT_CODE:'1', MESSAGE:'Update created', DATA:result});
 				}
 			});
 		}
