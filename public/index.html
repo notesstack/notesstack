@@ -62,39 +62,34 @@
                 <h4>Discover</h4>
             </div>
         </div>
-        <div ng-repeat = "update in updates" class='updates'>
-             <h3 class='title'>{{ update.title }}</h3>
-             <h4 class='subtitle'>{{ update.subtitle }}</h4>
-             <div id="bluepanel">
-                 <p><i class="el-icon-file"></i> 3 pages</p>
-                 <i class="el-icon-tag"></i>
-                 <ul class="btag"><li ng-repeat= "tag in update.tags">{{tag}}</li></ul>
-                 <p><i class="el-icon-filter"></i>Analysis</p>
-             </div>
-             <div id="greenpanel">
-                  <table>
-                     <tr>
-                     <td><i class="el-icon-align-justify"></i></td>
-                     <td><i class="el-icon-thumbs-up"></i></td>
-                     <td><i class="el-icon-comment"></i></td>
-                     </tr>
-                     <tr>
-                     <td>Restack</td>
-                     <td>Like</td>
-                     <td>Comment</td>
-                     </tr>
-                  </table>
-             </div>
-            <div id="followpanel">
-                <h6 class="user">{{ update.user }}</h6>
-                <a href="#"> <img class="btn-circle" src="img/Follow.jpg"> </a>
-            </div>
+        <div class='updates'>
+        </div>
         </div>
     </div>
+
+    <ul id="list">
+
+    </ul>
+
 <script src="lib/jquery-1.10.2.js"></script>
+<script src="js/jquery.total-storage.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-    $('#signup').click(function(){
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:3000/updates',
+            success: function(response){
+                console.log(response);
+                $(response.DATA).each(function(key, index){
+                    $('.updates').append('<h3 class="title">' + this.title + '</h3> <h4 class="subtitle">' + this.sub_title +'</h4><div id="bluepanel"><i class="el-icon-tag"></i><ul class="btag"><li>' + this.tags[0] + '</li><li>' + this.tags[1] +'</li><li>' + this.tags[2] +'</li></ul><p><i class="el-icon-filter"></i>' + this.categories + '</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div><div id="followpanel"><h6 class="user">'+ this.uid + '</h6> <a href="#"> <img class="btn-circle" src="img/Follow.jpg"> </a>');
+                });
+
+            },
+            error: function(response){
+                console.log(response);
+            }
+        });
+        $('#signup').click(function(){
         $('#signupform').toggle();
         $('#loginform').hide();
     });
@@ -112,13 +107,12 @@
             url: 'http://localhost:3000/signup',
             data: sendInfo,
             cache: true,
-            success: function(request, status, error){
-              alert(status);
+            success: function(response){
+              alert(response.MESSAGE);
             },
             dataType: 'json',
-            crossDomain: true,
-            error: function (request, status, error) {
-                alert(request.responseText);
+            error: function (response) {
+                alert(response.MESSAGE);
             }
         });
     });
@@ -131,18 +125,25 @@
                 type: 'POST',
                 url: 'http://localhost:3000/login',
                 data: sendInfo,
-                success: function(){alert('success');},
+                success: function(response){
+                    alert(response.MESSAGE)
+                    if (response.DATA) {
+                        var uid = response.DATA;
+                        $.totalStorage('uid', uid);
+                    } else {
+                        location.reload();
+                    }
+                },
                 dataType: 'json'
             });
         });
     $('#write').click(function(){
-       if (false) {
+       if ($.totalStorage('uid')) {
            window.location="new.html";
        } else {
            alert("Please login/signup");
        }
     });
-
 });
 </script>
 

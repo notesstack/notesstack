@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-US" ng-app="newNote">
+<html lang="en-US">
 <head>
   <meta charset="UTF-8">
   <title>Notesstack</title>
@@ -13,7 +13,6 @@
 </head>
 
 <body>
-    <div ng-controller="newNoteController">
         <div class="page-header">
             <header>
                 <div id="fixed-nav">
@@ -32,7 +31,25 @@
                    <fieldset>
                         <input id="Headline" type="text" placeholder="Headline" class="headline"> <br />
                         <input id="subHeadline" type="text" placeholder="Sub-headline" class="subHeadline">
-                        <textarea data-provide="markdown" rows="15" id="content" placeholder="Start writing here"> </textarea>
+
+                       <div id="wysihtml5-toolbar" style="display: none;">
+                           <a data-wysihtml5-command="bold"><button class="button"><i class="el-icon-bold"></button></i></a>
+                           <a data-wysihtml5-command="italic"><button class="button"><i class="el-icon-italic"></button></i></a>
+                           <a data-wysihtml5-command="fontSize" data-wysihtml5-command-value="large" id="h"><button class="button">H</button></a>
+                           <a data-wysihtml5-command="insertUnorderedList"><button class="button"><i class="el-icon-list"></button></i></a>
+                           <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
+                           <a data-wysihtml5-command="createLink"><button class="button"><i class="el-icon-globe"></i></button></a>
+                           <div data-wysihtml5-dialog="createLink" style="display: none;">
+                               <label>
+                                   Link:
+                                   <input data-wysihtml5-dialog-field="href" value="http://" class="text">
+                               </label>
+                               <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a>
+                           </div>
+                       </div>
+
+
+                       <textarea id="wysihtml5-textarea" rows="15" id="content" placeholder="Start writing here"> </textarea>
                        <label>Footnotes:</label> <br/>
                        <textarea rows="3" id="newfootnote" placeholder="Footnote" > </textarea>
                        <label>Type your tags here:</label> <br/>
@@ -59,28 +76,47 @@
                 </form>
             </div>
         </div>
-    </div>
-
-<script src="js/markdown.js"></script>
-<script src="js/app.js"></script>
 <script src="lib/jquery-1.10.2.js"></script>
+<script src="lib/bootstrap.js"></script>
+<script src="wysihtml5/parser_rules/advanced.js"></script>
+<script src="wysihtml5/dist/wysihtml5-0.3.0.min.js"></script>
+<script src="js/markdown.js"></script>
 <script type="text/javascript" src="js/jquery.ui.widget.js"></script>
 <script type="text/javascript" src="js/jquery.iframe-transport.js"></script>
 <script type="text/javascript" src="js/jquery.fileupload.js"></script>
 <script type="text/javascript" src="js/jquery.cloudinary.js"></script>
-<script src="lib/bootstrap.js"></script>
 <script src="js/bootstrap-markdown.js"></script>
 <script src="lib/angular/angular.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/jquery.total-storage.js"></script>
 
     <script type="text/javascript">
-
+        $(document).ready(function(){
+            var wysihtml5ParserRules = {
+                classes: {
+                    "wysiwyg-font-size-large": 1,
+                    "wysiwyg-font-size-small": 1
+                },
+                tags: {
+                    "span": 1,
+                    "ul": 1,
+                    "li": 1
+                }
+            };
+            var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
+            toolbar:      "wysihtml5-toolbar", // id of toolbar element
+            parserRules:  wysihtml5ParserRules // defined in parser rules set
+            });
         $('#publish').click(function(){
           var categories = $('#categories').val();
+          var userid = $.totalStorage('uid');
+          var tags = $("#newtags").val().split(',');
           var sendInfo = {
+              uid: userid,
               title: $('#Headline').val(),
               sub_title: $('#subHeadline').val(),
               content: $('#content').val(),
-              tags:$('#newtags').val() ,
+              tags:tags,
               categories: categories,
               footnote:$('#newfootnote').val() ,
               restacked: 0
@@ -90,11 +126,19 @@
                url: 'http://localhost:3000/update/new',
                data: sendInfo,
                cache: false,
-               success: function(){alert('success');},
+               success: function(response){
+                   alert(response.MESSAGE);
+                   var updateid = response.DATA._id;
+
+
+               },
                dataType: 'json'
            });
 
        });
+});
+
+
 
     </script>
 </body>

@@ -353,3 +353,40 @@ a {
     color: #000000;
     opacity: 1;
 }
+
+/*******Editor styles ********/
+
+#wysihtml5-textarea {
+    width: 500px;
+    border: 2px solid white;
+}
+
+.wysiwyg-font-size-large {
+    font-size: large;
+}
+
+#h {
+    font-size: 150%;
+    color: #ffffff;
+}
+
+#wysihtml5-toolbar{
+    height: 20px;
+    margin-left: 500px;
+    display: block;
+}
+
+#wysihtml5-toolbar .el-icon-bold, .el-icon-italic, .el-icon-list, .el-icon-globe{
+    color: #ffffff;
+    font-size: 150%;
+}
+
+#wysihtml5-toolbar .button {
+    background-color: #5BBE86;
+    padding: 5px;
+    border: none;
+    width: 50px;
+    height: 50px;
+    color: white;
+    margin-bottom: 20px;
+}
