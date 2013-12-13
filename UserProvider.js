@@ -187,7 +187,7 @@ UserProvider.prototype.getProfile = function(uid, callback)	{
 	});
 }
 
-UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, tags, categories, footnote, restacked, created_at, callback)	{
+UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, tags, categories, footnote, created_at, callback)	{
 	User.findOne({uid: uid}, function(err, result)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -198,8 +198,8 @@ UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, t
 		else
 		{
 			var update = new Post({uid: uid, title: title, sub_title: sub_title, content:content, tags:tags, categories: categories,
-													restacked: restacked, created_at: created_at});
-			result.save(function(err, result)	{
+													created_at: created_at});
+			update.save(function(err, result)	{
 				if(err){
 					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 				}
@@ -226,7 +226,7 @@ UserProvider.prototype.findUpdate = function(id, callback)	{
 	});
 }
 
-UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, content, tags, categories, footnote, restacked, updated_at, callback)	{
+UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, content, tags, categories, footnote, updated_at, callback)	{
 	User.findOne({uid: uid}, function(err, result)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -249,7 +249,6 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 					result.content = content;
 					result.tags = tags;
 					result.categories =  categories;
-					result.restacked = restacked;
 					result.updated_at = updated_at;
 					result.save(function(err)	{
 						if(err){

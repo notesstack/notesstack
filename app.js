@@ -75,10 +75,9 @@ app.post('/update/new', function(req, res)	{
 	var tags = req.body.tags;
 	var categories = req.body.categories;
 	var footnote = req.body.footnote;
-	var restacked = req.body.restacked;
 	var created_at = new Date();
 
-	userProvider.createUpdate(uid, title, sub_title, content, tags, categories, footnote, restacked, created_at, function(response)	{
+	userProvider.createUpdate(uid, title, sub_title, content, tags, categories, footnote, created_at, function(response)	{
 		res.json(response);
 	});
 });
@@ -100,10 +99,9 @@ app.post('/update', function(req, res)	{
 	var tags = req.body.tags;
 	var categories = req.body.categories;
 	var footnote = req.body.footnote;
-	var restacked = req.body.restacked;
 	var updated_at = new Date();
 
-	userProvider.updateUpdate(id, uid, title, sub_title, content, tags, categories, footnote, restacked, updated_at, function(response)	{
+	userProvider.updateUpdate(id, uid, title, sub_title, content, tags, categories, footnote, updated_at, function(response)	{
 		res.json(response);
 	});
 });
