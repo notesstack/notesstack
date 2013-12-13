@@ -14,6 +14,7 @@ var User = new Schema({
 	email: String
 ,	uid: String
 ,	username: String
+,	bio: String
 ,	hash: String
 ,	firstname: {type: String, default: ''}
 ,	lastname: {type: String, default: ''}
@@ -39,12 +40,13 @@ var Post = new Schema({
 	, footnote : [String]
 	, restacked : [String]
 	, likes : [String]
-	, likes_count : [String]
+	, likes_count : Number
 	, shared : [String]
   , created_at  : Date
 	, updated_at	: Date
-	, published : {type: Boolean, default:false} 
+	, published : {type: Boolean, default:true} 
 	, read_by_admin : {type: Boolean, default:false}
+	, crew_picks : {type: Boolean, default:false}
   , comments    : [Comments]
 });
 
@@ -100,14 +102,14 @@ UserProvider.prototype.login = function(email, password, callback)	{
 	});
 }
 
-UserProvider.prototype.socialLogin = function(uid, email, username, access_token, firstname, lastname, avatar_name, callback)	{
+UserProvider.prototype.socialLogin = function(uid, email, username, bio, access_token, firstname, lastname, avatar_name, callback)	{
 	User.findOne({uid:uid}, function(err, result)	{
 		if(err){
 			res.json({RESULT_CODE:'-1', MESSAGE:'System error'});
 		}
 		else if(result == null)	{
 			var hashpassword = hash(access_token);
-			var newUser = new User({uid:uid, email: email, username:username, hash: hashpassword, firstname: firstname, lastname: lastname,
+			var newUser = new User({uid:uid, email: email, username:username, bio: bio, hash: hashpassword, firstname: firstname, lastname: lastname,
 											avatar: avatar_name});
 			newUser.save(function(err){
 				if(err)
@@ -141,7 +143,7 @@ UserProvider.prototype.socialLogin = function(uid, email, username, access_token
 	});
 }
 
-UserProvider.prototype.updateProfile = function(uid, firstname, lastname, avatar_name, callback)	{
+UserProvider.prototype.updateProfile = function(uid, firstname, lastname, bio, avatar_name, callback)	{
 	User.findOne({uid:uid}, function(err, result)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -154,6 +156,7 @@ UserProvider.prototype.updateProfile = function(uid, firstname, lastname, avatar
 			result.firstname = firstname;
 			result.lastname = lastname;
 			result.avatar = avatar_name;
+			result.bio = bio;
 			result.save(function(err)	{
 				if(err){
 					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -177,12 +180,20 @@ UserProvider.prototype.getProfile = function(uid, callback)	{
 		else
 		{
 			var profiledata = {};
+			profiledata.uid = result.uid;
 			profiledata.username = result.username;
-			profiledata.firstname = result.firstname;
-			profiledata.lastname = result.lastname;
 			profiledata.avatar = result.avatar;
-			
-			callback(profiledata);
+			profiledata.bio = result.bio;
+
+			Post.find({uid:uid}, {title:1, sub_title:1, tags:1, categories:1, likes:1, restacked:1, published:1, comments:1}, {limit:10}, function(err, result)	{
+				if(err){
+					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+				}
+				else
+				{
+					callback({RESULT_CODE:'1', DATA: {profile: profiledata, posts: result}});
+				}
+			});
 		}
 	});
 }
@@ -236,6 +247,9 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 		}
 		else
 		{
+			var username = result.username;
+			var avatar = result.avatar;
+
 			Post.findById(id, function(err, result)	{
 				if(err){
 					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -250,12 +264,27 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 					result.tags = tags;
 					result.categories =  categories;
 					result.updated_at = updated_at;
-					result.save(function(err)	{
+					result.save(function(err, post)	{
 						if(err){
 							callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 						}
 						else	{
-							callback({RESULT_CODE:'1', MESSAGE:'Update updated'});
+							var up = {};
+							up.uid = uid;
+							up.title = post.title;
+							up.sub_title = post.sub_title;
+							up.content = post.content;
+							up.tags = post.tags;
+							up.categories = post.categories;
+							up._id = post._id;
+							up.username = username;
+							up.avatar = avatar;
+							up.read_by_admin = post.read_by_admin;
+							up.likes = post.likes;
+							up.comments = post.comments;
+							up.restacked = post.restacked;
+							
+							callback({RESULT_CODE:'1', DATA:up});
 						}
 					});
 				}
@@ -268,13 +297,37 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 }
 
 UserProvider.prototype.findAllUpdate = function(callback)	{
-	Post.find({}, {}, {limit:10}, function(err, result)	{
+	Post.find({published:true}, {}, {limit:10}, function(err, result)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 		}
 		else
 		{
-			callback({RESULT_CODE:'1', DATA: result});
+			var uids = [];
+			result.forEach(function(user)	{
+				uids.push(user.uid);
+			});				
+			userProfile(uids, function(err, users)	{
+				var posts = [];
+				result.forEach(function(user)	{
+					var post = {};
+					post.uid = user.uid;
+					post.title = user.title;
+					post.sub_title = user.sub_title;
+					post.tags = user.tags;
+					post.categories = user.categories;
+					post._id = user._id;
+					post.username = users[user.uid].username;
+					post.avatar = users[user.uid].avatar;
+					post.created_at = user.created_at;
+					post.likes = user.likes;
+					post.restacked = user.restacked;
+					post.published = user.published;
+					post.comments = user.comments;
+					posts.push(post);
+				});
+				callback({RESULT_CODE:'1', DATA: posts});
+			});
 		}
 	});
 }
@@ -342,6 +395,22 @@ UserProvider.prototype.updateLike = function(id, uid, callback)	{
 					});
 				}
 			});
+		}
+	});
+}
+
+function userProfile(uid, callback)	{
+	User.find({uid:{$in:uid}}, {uid:1, username:1, avatar:1}, function(err, result)	{
+		if(err){
+			callback(err);
+		}
+		else
+		{
+			var profiledata = {};
+			result.forEach(function(user)	{
+				profiledata[user.uid] = {username:user.username, avatar:user.avatar};
+			});				
+			callback(null, profiledata);
 		}
 	});
 }
