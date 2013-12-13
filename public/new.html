@@ -33,12 +33,12 @@
                         <input id="subHeadline" type="text" placeholder="Sub-headline" class="subHeadline">
 
                        <div id="wysihtml5-toolbar" style="display: none;">
-                           <a data-wysihtml5-command="bold"><button class="button"><i class="el-icon-bold"></button></i></a>
-                           <a data-wysihtml5-command="italic"><button class="button"><i class="el-icon-italic"></button></i></a>
-                           <a data-wysihtml5-command="fontSize" data-wysihtml5-command-value="large" id="h"><button class="button">H</button></a>
-                           <a data-wysihtml5-command="insertUnorderedList"><button class="button"><i class="el-icon-list"></button></i></a>
+                           <a data-wysihtml5-command="bold"><button class="button"><i class="el-icon-bold"></button></i></a>  <br />
+                           <a data-wysihtml5-command="italic"><button class="button"><i class="el-icon-italic"></button></i></a>     <br />
+                           <a data-wysihtml5-command="fontSize" data-wysihtml5-command-value="large" id="h"><button class="button">H</button></a>    <br />
+                           <a data-wysihtml5-command="insertUnorderedList"><button class="button"><i class="el-icon-list"></button></i></a>   <br />
                            <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
-                           <a data-wysihtml5-command="createLink"><button class="button"><i class="el-icon-globe"></i></button></a>
+                           <a data-wysihtml5-command="createLink"><button class="button"><i class="el-icon-globe"></i></button></a> <br />
                            <div data-wysihtml5-dialog="createLink" style="display: none;">
                                <label>
                                    Link:
@@ -49,12 +49,10 @@
                        </div>
 
 
-                       <textarea id="wysihtml5-textarea" rows="15" id="content" placeholder="Start writing here"> </textarea>
-                       <label>Footnotes:</label> <br/>
-                       <textarea rows="3" id="newfootnote" placeholder="Footnote" > </textarea>
-                       <label>Type your tags here:</label> <br/>
+                       <textarea id="wysihtml5-textarea" rows="15" placeholder="Start writing here"> </textarea> <br />
+                       <label><i class="el-icon-tag newtagicon"></i></label> <br/>
                        <input id="newtags" type="text" placeholder="Tags" rows="2" class="tags"> <br /><br />
-                       <label>Select a Category</label>
+                       <img src="/img/discover.jpg" id="newdisc" />
                        <select id="categories">
                            <option value="Reports">Reports</option>
                            <option value="Current">Current</option>
@@ -115,11 +113,12 @@
               uid: userid,
               title: $('#Headline').val(),
               sub_title: $('#subHeadline').val(),
-              content: $('#content').val(),
+              content: $('#wysihtml5-textarea').val(),
               tags:tags,
               categories: categories,
               footnote:$('#newfootnote').val() ,
-              restacked: 0
+              restacked: 0,
+              published: true
           };
            $.ajax({
                type: 'POST',
@@ -136,7 +135,37 @@
            });
 
        });
+            $('#save').click(function(){
+                var categories = $('#categories').val();
+                var userid = $.totalStorage('uid');
+                var tags = $("#newtags").val().split(',');
+                var sendInfo = {
+                    uid: userid,
+                    title: $('#Headline').val(),
+                    sub_title: $('#subHeadline').val(),
+                    content: $('#wysihtml5-textarea').val(),
+                    tags:tags,
+                    categories: categories,
+                    footnote:$('#newfootnote').val() ,
+                    restacked: 0
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/update/new',
+                    data: sendInfo,
+                    cache: false,
+                    success: function(response){
+                        alert(response.MESSAGE);
+                        var updateid = response.DATA._id;
+
+
+                    },
+                    dataType: 'json'
+                });
+
+            });
 });
+
 
 
 

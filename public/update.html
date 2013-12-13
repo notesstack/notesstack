@@ -15,6 +15,7 @@
 <div ng-controller = "updateCntrl">
     <div class="page-header">
         <header>
+            <div id="fixed-nav">
             <img src="img/buildboot.jpg" alt="home" class="home"/>
             <input type="search" class="searchbox"> <i class="el-icon-search searchboxicon"></i>
             <div id="navbuttons">
@@ -30,11 +31,13 @@
                 <div id="signupform" style="display: none;">
                     <input type="email" id="signupemail" placeholder="Email"> <br />
                     <input type="password" id="signuppassword" placeholder="Password"> <br />
-                    <input type="password" id="reenterpassword" placeholder="Re enter Password"><br />
+                    <input type="text" id="reenterpassword" placeholder="Display Name"><br />
                     <input type="checkbox" checked class="terms" > Accept Terms and Conditions <br />
                     <button id="signup2">Sign Up </button> <br />
                 </div>
             </div>
+        </div>
+
             <div id="logo"> <h1> N O T E S S T A C K </h1> </div>
         </header>
     </div>
@@ -84,13 +87,14 @@
         $.ajax({
             type: 'GET',
             url: 'http://localhost:3000/update',
-            data: '52aac6b4a4d9b34513000006',
+            data: '{ "_id": "52ab5f0a72ca876d1200000c"}',
             success: function(response){
                 console.log(response);
             },
             error: function(response){
                 console.log(response);
-            }
+            },
+            content: 'json'
         });
     });
 </script>

@@ -31,7 +31,7 @@
                         <div id="signupform" style="display: none;">
                                 <input type="email" id="signupemail" placeholder="Email"> <br />
                                 <input type="password" id="signuppassword" placeholder="Password"> <br />
-                                <input type="password" id="reenterpassword" placeholder="Re enter Password"><br />
+                                <input type="text" id="reenterpassword" placeholder="Display Name"><br />
                                 <input type="checkbox" checked class="terms" > Accept Terms and Conditions <br />
                                 <button id="signup2">Sign Up </button> <br />
                         </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="panel">
             <div id="stream">
-                <i class="el-icon-magnet"></i>
+                <img src="img/stream.jpg" alt="stream" class="stream">
                 <h4>Stream</h4>
                 <i class="el-icon-ok"> <p>Top Notes </p></i>  <br />
                 <i class="el-icon-ok"> <p>Crew Picks </p></i> <br />
@@ -58,7 +58,7 @@
                 <a class="alltags" href="#">See all tags</a>
             </div>
             <div id="discover">
-               <i class="el-icon-filter"> </i>
+                <img src="img/discover.jpg" alt="discover" class="discover">
                 <h4>Discover</h4>
             </div>
         </div>
@@ -79,7 +79,7 @@
             type: 'GET',
             url: 'http://localhost:3000/updates',
             success: function(response){
-                console.log(response);
+                console.log(response.DATA);
                 $(response.DATA).each(function(key, index){
                     $('.updates').append('<h3 class="title">' + this.title + '</h3> <h4 class="subtitle">' + this.sub_title +'</h4><div id="bluepanel"><i class="el-icon-tag"></i><ul class="btag"><li>' + this.tags[0] + '</li><li>' + this.tags[1] +'</li><li>' + this.tags[2] +'</li></ul><p><i class="el-icon-filter"></i>' + this.categories + '</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div><div id="followpanel"><h6 class="user">'+ this.uid + '</h6> <a href="#"> <img class="btn-circle" src="img/Follow.jpg"> </a>');
                 });
@@ -89,6 +89,14 @@
                 console.log(response);
             }
         });
+
+
+        if($.totalStorage('uid')){
+            $('#signup').hide();
+            $('#login').hide();
+            $('#signout').show();
+        }
+
         $('#signup').click(function(){
         $('#signupform').toggle();
         $('#loginform').hide();
@@ -108,7 +116,7 @@
             data: sendInfo,
             cache: true,
             success: function(response){
-              alert(response.MESSAGE);
+              alert(response.MESSAGE + 'Please Login.');
             },
             dataType: 'json',
             error: function (response) {
@@ -130,6 +138,9 @@
                     if (response.DATA) {
                         var uid = response.DATA;
                         $.totalStorage('uid', uid);
+                        $('#login').hide();
+                        $('#signup').hide();
+                        $('#loginform').hide();
                     } else {
                         location.reload();
                     }

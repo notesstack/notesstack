@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-US" ng-app="myApp">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <title>Notesstack</title>
@@ -15,9 +15,10 @@
 <div ng-controller = "updateCntrl">
     <div class="page-header">
         <header>
-            <div id="fixed-nav">
-                <img src="img/buildboot.jpg" alt="home" class="home"/>
-                <input type="search" class="searchbox"> <i class="el-icon-search searchboxicon"></i>
+            <img src="img/buildboot.jpg" alt="home" class="home"/>
+            <input type="search" class="searchbox"> <i class="el-icon-search searchboxicon"></i>
+
+            <div id="left-nav">
                 <div id="navbuttons">
                     <button class="button" id="write">Write</button>
                     <button class="button" id="login">Login</button>
@@ -31,70 +32,52 @@
                     <div id="signupform" style="display: none;">
                         <input type="email" id="signupemail" placeholder="Email"> <br />
                         <input type="password" id="signuppassword" placeholder="Password"> <br />
-                        <input type="password" id="reenterpassword" placeholder="Re enter Password"><br />
+                        <input type="text" id="reenterpassword" placeholder="Display name"><br />
                         <input type="checkbox" checked class="terms" > Accept Terms and Conditions <br />
                         <button id="signup2">Sign Up </button> <br />
                     </div>
+                    <button class="button" id="signout" style="display: none;">Sign Out</button>
                 </div>
             </div>
             <div id="logo"> <h1> N O T E S S T A C K </h1> </div>
         </header>
     </div>
-    <div class="panel">
-        <div id="stream">
-            <i class="el-icon-magnet"></i>
-            <h4>Stream</h4>
-            <i class="el-icon-ok"> <p>Top Notes </p></i>  <br />
-            <i class="el-icon-ok"> <p>Crew Picks </p></i> <br />
-            <i class="el-icon-ok"> <p>New Notes </p></i>  <br />
-            <i class="el-icon-ok"> <p>Following </p></i>  <br />
-        </div>
-        <div id="tags">
-            <i class="el-icon-tags"></i>
-            <h4>Tags</h4>
-            <h6 ng-repeat = "tag in updates | limitTo: 3" class="tagnames">
-                <a href="#">{{ tag.tags[0] }}</a>
-            </h6>
-            <a class="alltags" href="#">See all tags</a>
-        </div>
-        <div id="discover">
-            <i class="el-icon-filter"> </i>
-            <h4>Discover</h4>
-        </div>
+
+    <div class='updates'>
     </div>
-    <div ng-repeat = "update in updates" class='updates'>
-        <h3 class='title'>{{ update.title }}</h3>
-        <h4 class='subtitle'>{{ update.subtitle }}</h4>
-        <div id="bluepanel">
-            <p><i class="el-icon-file"></i> 3 pages</p>
-            <i class="el-icon-tag"></i>
-            <ul class="btag"><li ng-repeat= "tag in update.tags">{{tag}}</li></ul>
-            <p><i class="el-icon-filter"></i>Analysis</p>
-        </div>
-        <div id="greenpanel">
-            <table>
-                <tr>
-                    <td><i class="el-icon-align-justify"></i></td>
-                    <td><i class="el-icon-thumbs-up"></i></td>
-                    <td><i class="el-icon-comment"></i></td>
-                </tr>
-                <tr>
-                    <td>Restack</td>
-                    <td>Like</td>
-                    <td>Comment</td>
-                </tr>
-            </table>
-        </div>
-        <div id="followpanel">
-            <h6 class="user">{{ update.user }}</h6>
-            <a href="#"> <img class="btn-circle" src="img/Follow.jpg"> </a>
-        </div>
     </div>
 </div>
 <script src="lib/jquery-1.10.2.js"></script>
 <script src="js/jquery.total-storage.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        var userid = $.totalStorage('uid');
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:3000/profile/' + userid,
+            success: function(response){
+                console.log(response.DATA.posts);
+                $(response.DATA.posts).each(function(key, index){
+                    console.log(this.title);
+                    $('.updates').append('<h3 class="title">' + this.title +'</h3> <h4 class="subtitle">' + this.sub_title + '</h4> <div id="bluepanel"> <i class="el-icon-tag"></i> <ul class="btag"><li>' + this.tags[0] + '<br/>' + this.tags[1] + '<br>' + this.tags[2] + '</li></ul> <p><i class="el-icon-filter"></i>'+ this.categories +'</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div>')
+                });
+            },
+            error: function(response){
+                console.log(response);
+          }
+        });
+
+        if($.totalStorage('uid')){
+            $('#signup').hide();
+            $('#login').hide();
+            $('#signout').show();
+        }
+
+        $('#signout').click(function(){
+           window.location = "/"
+            $.totalStorage('uid', null);
+        });
+
         $('#signup').click(function(){
             $('#signupform').toggle();
             $('#loginform').hide();
@@ -136,6 +119,9 @@
                     if (response.DATA) {
                         var uid = response.DATA;
                         $.totalStorage('uid', uid);
+                        $('#login').hide();
+                        $('#signup').hide();
+                        $('#logout').show();
                     } else {
                         location.reload();
                     }
@@ -149,20 +135,6 @@
             } else {
                 alert("Please login/signup");
             }
-        });
-
-        $('#logo').click(function(){
-            var userid = $.totalStorage('uid');
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:3000/profile/'+ userid,
-                success: function(response){
-                    console.log(response);
-                },
-                error: function(response){
-                    console.log(response);
-                }
-            })
         });
 
     });
