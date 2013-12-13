@@ -268,7 +268,7 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 }
 
 UserProvider.prototype.findAllUpdate = function(callback)	{
-	Post.find({}, {limit:10}, function(err, result)	{
+	Post.find({}, {}, {limit:10}, function(err, result)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 		}
