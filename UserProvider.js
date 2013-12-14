@@ -237,7 +237,7 @@ UserProvider.prototype.findUpdate = function(id, callback)	{
 	});
 }
 
-UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, content, tags, categories, footnote, updated_at, callback)	{
+UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, content, tags, categories, footnote, published, updated_at, callback)	{
 	User.findOne({uid: uid}, function(err, result)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -263,6 +263,7 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 					result.content = content;
 					result.tags = tags;
 					result.categories =  categories;
+					result.published = published;
 					result.updated_at = updated_at;
 					result.save(function(err, post)	{
 						if(err){
@@ -283,6 +284,7 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 							up.likes = post.likes;
 							up.comments = post.comments;
 							up.restacked = post.restacked;
+							up.published = post.published;
 							
 							callback({RESULT_CODE:'1', DATA:up});
 						}

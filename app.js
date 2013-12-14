@@ -101,9 +101,10 @@ app.post('/update', function(req, res)	{
 	var tags = req.body.tags;
 	var categories = req.body.categories;
 	var footnote = req.body.footnote;
+	var published = req.body.published;
 	var updated_at = new Date();
 
-	userProvider.updateUpdate(id, uid, title, sub_title, content, tags, categories, footnote, updated_at, function(response)	{
+	userProvider.updateUpdate(id, uid, title, sub_title, content, tags, categories, footnote, published, updated_at, function(response)	{
 		res.json(response);
 	});
 });
