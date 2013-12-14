@@ -211,15 +211,32 @@ UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, t
 		}
 		else
 		{
+			var username = result.username;
+			var avatar = result.avatar;
 			var search_keys = searchify(content);
 			var update = new Post({uid: uid, title: title, sub_title: sub_title, content:content, tags:tags, categories: categories,
 													created_at: created_at, search_keys: search_keys});
-			update.save(function(err, result)	{
+			update.save(function(err, post)	{
 				if(err){
 					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 				}
 				else	{
-					callback({RESULT_CODE:'1', MESSAGE:'Update created', DATA:result});
+					var up = {};
+					up.uid = uid;
+					up.title = post.title;
+					up.sub_title = post.sub_title;
+					up.content = post.content;
+					up.tags = post.tags;
+					up.categories = post.categories;
+					up._id = post._id;
+					up.username = username;
+					up.avatar = avatar;
+					up.read_by_admin = post.read_by_admin;
+					up.likes = post.likes;
+					up.comments = post.comments;
+					up.restacked = post.restacked;
+					up.published = post.published;
+					callback({RESULT_CODE:'1', MESSAGE:'Update created', DATA:up});
 				}
 			});
 		}
@@ -227,16 +244,33 @@ UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, t
 }
 
 UserProvider.prototype.findUpdate = function(id, callback)	{
-	Post.findById(id, function(err, result)	{
+	Post.findById(id, function(err, post)	{
 		if(err){
 			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
 		}
-		else if(result == null)	{
+		else if(post == null)	{
 			callback({RESULT_CODE:'-1', MESSAGE:'Update does not exist'});
 		}
 		else
 		{
-			callback({RESULT_CODE:'1', DATA: result});
+			User.findOne({uid:post.uid}, {uid:1, username:1, avatar:1}, function(err, result)	{
+				var up = {};
+				up.uid = result.uid;
+				up.title = post.title;
+				up.sub_title = post.sub_title;
+				up.content = post.content;
+				up.tags = post.tags;
+				up.categories = post.categories;
+				up._id = post._id;
+				up.username = result.username;
+				up.avatar = result.avatar;
+				up.read_by_admin = post.read_by_admin;
+				up.likes = post.likes;
+				up.comments = post.comments;
+				up.restacked = post.restacked;
+				up.published = post.published;
+				callback({RESULT_CODE:'1', DATA: up});
+			});
 		}
 	});
 }
