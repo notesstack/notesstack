@@ -51,13 +51,23 @@
 <script src="js/jquery.total-storage.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        var userid = $.totalStorage('uid');
+        function gup(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+        var userid = gup('uid');
         $.ajax({
             type: 'GET',
             url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/profile/' + userid,
             success: function(response){
                 $(response.DATA.posts).each(function(key, index){
-                    $('.updates').append('<h3 class="title">' + this.title +'</h3> <h4 class="subtitle">' + this.sub_title + '</h4> <div id="bluepanel"> <i class="el-icon-tag"></i> <ul class="btag"><li>' + this.tags[0] + '<br/>' + this.tags[1] + '<br>' + this.tags[2] + '</li></ul> <p><i class="el-icon-filter"></i>'+ this.categories +'</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div>')
+                    $('.updates').append('<h3 href="http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/profile.html?userid=' + this.username + '"class="title">' + this.title +'</h3> <h4 class="subtitle">' + this.sub_title + '</h4> <div id="bluepanel"> <i class="el-icon-tag"></i> <ul class="btag"><li>' + this.tags[0] + '<br/>' + this.tags[1] + '<br>' + this.tags[2] + '</li></ul> <p><i class="el-icon-filter"></i>'+ this.categories +'</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div>')
                 });
             },
             error: function(response){
