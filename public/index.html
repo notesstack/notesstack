@@ -77,11 +77,11 @@
     $(document).ready(function(){
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:3000/updates',
+            url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/updates',
             success: function(response){
                 console.log(response.DATA);
                 $(response.DATA).each(function(key, index){
-                    $('.updates').append('<h3 class="title">' + this.title + '</h3> <h4 class="subtitle">' + this.sub_title +'</h4><div id="bluepanel"><i class="el-icon-tag"></i><ul class="btag"><li>' + this.tags[0] + '</li><li>' + this.tags[1] +'</li><li>' + this.tags[2] +'</li></ul><p><i class="el-icon-filter"></i>' + this.categories + '</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div><div id="followpanel"><h6 class="user">'+ this.uid + '</h6> <a href="#"> <img class="btn-circle" src="img/Follow.jpg"> </a>');
+                    $('.updates').append('<a id="gotopost" href="http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/update.html?id=' + this._id + '"><h3 class="title">' + this.title + '</h3> <h4 class="subtitle">' + this.sub_title +'</h4></a><div id="bluepanel"><i class="el-icon-tag"></i><ul class="btag"><li>' + this.tags[0] + '</li><li>' + this.tags[1] +'</li><li>' + this.tags[2] +'</li></ul><p><i class="el-icon-filter"></i>' + this.categories + '</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div><div id="followpanel"><h6 class="user">'+ this.uid + '</h6> <a href="#"> <img class="btn-circle" src="img/Follow.jpg"> </a>');
                 });
 
             },
@@ -112,7 +112,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/signup',
+            url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/signup',
             data: sendInfo,
             cache: true,
             success: function(response){
@@ -131,7 +131,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:3000/login',
+                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/login',
                 data: sendInfo,
                 success: function(response){
                     alert(response.MESSAGE)
@@ -150,11 +150,13 @@
         });
     $('#write').click(function(){
        if ($.totalStorage('uid')) {
-           window.location="new.html";
+           window.location="http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/new.html";
        } else {
            alert("Please login/signup");
        }
     });
+
+
 });
 </script>
 

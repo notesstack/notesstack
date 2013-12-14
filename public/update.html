@@ -41,34 +41,8 @@
             <div id="logo"> <h1> N O T E S S T A C K </h1> </div>
         </header>
     </div>
-    <div class="update" ng-repeat="update in updates | limitTo: 1">
-        <h6 class="updateuser"> by {{update.user}} </h6>
-        <div id="updatesidepanel">
-            <p><i class="el-icon-file"></i> 3 pages</p>     <br />
-            <i class="el-icon-tag"></i>
-            <ul class="btag"><li ng-repeat= "tag in update.tags">{{tag}}</li></ul> <br />
-            <p><i class="el-icon-filter"></i>Analysis</p> <br />
-        </div>
-        <h3 class="updatetitle"> {{ update.title}} </h3>
-        <h4 class="updatesubtitle"> {{ update.subtitle}} </h4>
-        <p class="updatebody"> {{ update.body }} </p>
-        <p class="updatefootnote"> {{ update.footnote }} </p>
-        <div id="updateiconpanel">
-            <table>
-                <tr>
-                    <td><i class="el-icon-align-justify"></i></td>
-                    <td><i class="el-icon-thumbs-up"></i></td>
-                    <td><i class="el-icon-comment"></i></td>
-                    <td><i class="el-icon-share"></i></td>
-                </tr>
-                <tr>
-                    <td>Restack</td>
-                    <td>Like</td>
-                    <td>Comment</td>
-                    <td>Share</td>
-                </tr>
-            </table>
-        </div>
+    <div class="update">
+
     </div>
 
 
@@ -84,18 +58,91 @@
 <script src="js/controllers/updateCntrl.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        function gup(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+        var id = gup('id');
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:3000/update',
-            data: '{ "_id": "52ab5f0a72ca876d1200000c"}',
+            url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/update/' + id,
             success: function(response){
-                console.log(response);
+                $(response.DATA).each(function(key, index){
+                            $('.update').append('<h6 class="updateuser"> by ' + this.uid + '</h6><div id="updatesidepanel"><i class="el-icon-tag"></i><ul class="btag">' + this.tags[0] + '<br>' + this.tags[1] + '<br>' + this.tags[2] + '</li></ul><br/><p><i class="el-icon-filter"></i>' + this.categories +'</p><br/></div><h3 class="updatetitle">' + this.title + '</h3><h4 class="updatesubtitle">' + this.sub_title + '</h4><p class="updatebody">' + this.content + '</p><div id="updateiconpanel"><table><tr><td><i class="el-icon-align-justify"></i></td><td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td><td><i class="el-icon-share"></i></td></tr><tr><td>Restack</td><td>Like</td><td>Comment</td><td>Share</td></tr></table></div>')
+                });
             },
             error: function(response){
                 console.log(response);
             },
             content: 'json'
         });
+
+
+        $('#signup').click(function(){
+            $('#signupform').toggle();
+            $('#loginform').hide();
+        });
+        $('#login').click(function(){
+            $('#loginform').toggle();
+            $('#signupform').hide();
+        });
+        $('#signup2').click(function() {
+            var sendInfo = { email: $("#signupemail").val(),
+                username: $("#reenterpassword").val(),
+                password: $("#signuppassword").val() };
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/signup',
+                data: sendInfo,
+                cache: true,
+                success: function(response){
+                    alert(response.MESSAGE + 'Please Login.');
+                },
+                dataType: 'json',
+                error: function (response) {
+                    alert(response.MESSAGE);
+                }
+            });
+        });
+
+        $('#login2').click(function() {
+            var sendInfo = { email: $("#loginemail").val(),
+                password: $("#loginpassword").val()};
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/login',
+                data: sendInfo,
+                success: function(response){
+                    alert(response.MESSAGE)
+                    if (response.DATA) {
+                        var uid = response.DATA;
+                        $.totalStorage('uid', uid);
+                        $('#login').hide();
+                        $('#signup').hide();
+                        $('#loginform').hide();
+                    } else {
+                        location.reload();
+                    }
+                },
+                dataType: 'json'
+            });
+        });
+        $('#write').click(function(){
+            if ($.totalStorage('uid')) {
+                window.location="new.html";
+            } else {
+                alert("Please login/signup");
+            }
+        });
+
     });
 </script>
 </body>

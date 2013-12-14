@@ -281,7 +281,7 @@ a {
 
 .updateuser {
     width: 136px;
-    margin-left: 260px;
+    margin-left: 185px;
     text-align: center;
     color: #000000;
     font-size: 120%;
@@ -457,4 +457,8 @@ label {
     width: 150px;
     height: 30px;
     margin-bottom: 30px;
+}
+
+#gotopost {
+  cursor: pointer;
 }
