@@ -84,8 +84,8 @@ app.post('/update/new', function(req, res)	{
 	});
 });
 
-app.get('/update', function(req, res)	{
-	var id = req.body._id;
+app.get('/update/:id', function(req, res)	{
+	var id = req.params.id;
 
 	userProvider.findUpdate(id, function(response)	{
 		res.json(response);
