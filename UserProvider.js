@@ -5,6 +5,8 @@ var hash = password.hash;
 var validate = password.validate;
 var uniqueId = password.uniqueId;
 
+var searchify = require('./utils/searchify.js');
+
 mongoose.connect('mongodb://localhost/notesstack');
 
 var Schema = mongoose.Schema
@@ -48,6 +50,7 @@ var Post = new Schema({
 	, read_by_admin : {type: Boolean, default:false}
 	, crew_picks : {type: Boolean, default:false}
   , comments    : [Comments]
+	, search_keys: [String]
 });
 
 mongoose.model('Post', Post);
@@ -208,8 +211,9 @@ UserProvider.prototype.createUpdate = function(uid, title, sub_title, content, t
 		}
 		else
 		{
+			var search_keys = searchify(content);
 			var update = new Post({uid: uid, title: title, sub_title: sub_title, content:content, tags:tags, categories: categories,
-													created_at: created_at});
+													created_at: created_at, search_keys: search_keys});
 			update.save(function(err, result)	{
 				if(err){
 					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
@@ -265,6 +269,7 @@ UserProvider.prototype.updateUpdate = function(id, uid, title, sub_title, conten
 					result.categories =  categories;
 					result.published = published;
 					result.updated_at = updated_at;
+					result.search_keys = searchify(content);
 					result.save(function(err, post)	{
 						if(err){
 							callback({RESULT_CODE:'-1', MESSAGE:'System error'});
