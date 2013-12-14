@@ -71,7 +71,7 @@
         var id = gup('id');
         $.ajax({
             type: 'GET',
-            url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/update/' + id,
+            url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/update/' + id,
             success: function(response){
                 $(response.DATA).each(function(key, index){
                             $('.update').append('<h6 class="updateuser"> by ' + this.uid + '</h6><div id="updatesidepanel"><i class="el-icon-tag"></i><ul class="btag">' + this.tags[0] + '<br>' + this.tags[1] + '<br>' + this.tags[2] + '</li></ul><br/><p><i class="el-icon-filter"></i>' + this.categories +'</p><br/></div><h3 class="updatetitle">' + this.title + '</h3><h4 class="updatesubtitle">' + this.sub_title + '</h4><p class="updatebody">' + this.content + '</p><div id="updateiconpanel"><table><tr><td><i class="el-icon-align-justify"></i></td><td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td><td><i class="el-icon-share"></i></td></tr><tr><td>Restack</td><td>Like</td><td>Comment</td><td>Share</td></tr></table></div>')
@@ -99,7 +99,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/signup',
+                url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/signup',
                 data: sendInfo,
                 cache: true,
                 success: function(response){
@@ -118,7 +118,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/login',
+                url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/login',
                 data: sendInfo,
                 success: function(response){
                     alert(response.MESSAGE)

@@ -54,7 +54,7 @@
         var userid = $.totalStorage('uid');
         $.ajax({
             type: 'GET',
-            url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/profile/' + userid,
+            url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/profile/' + userid,
             success: function(response){
                 $(response.DATA.posts).each(function(key, index){
                     $('.updates').append('<h3 class="title">' + this.title +'</h3> <h4 class="subtitle">' + this.sub_title + '</h4> <div id="bluepanel"> <i class="el-icon-tag"></i> <ul class="btag"><li>' + this.tags[0] + '<br/>' + this.tags[1] + '<br>' + this.tags[2] + '</li></ul> <p><i class="el-icon-filter"></i>'+ this.categories +'</p></div><div id="greenpanel"><table><tr><td><i class="el-icon-align-justify"></i></td> <td><i class="el-icon-thumbs-up"></i></td><td><i class="el-icon-comment"></i></td></tr> <tr><td>Restack</td><td>Like</td> <td>Comment</td></tr></table></div>')
@@ -91,7 +91,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/signup',
+                url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/signup',
                 data: sendInfo,
                 cache: true,
                 success: function(response){
@@ -110,7 +110,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/login',
+                url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/login',
                 data: sendInfo,
                 success: function(response){
                     alert(response.MESSAGE)
