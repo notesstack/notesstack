@@ -61,7 +61,7 @@
             else
                 return results[1];
         }
-        var userid = gup('uid');
+        var userid = gup('userid');
         $.ajax({
             type: 'GET',
             url: 'http://ec2-54-201-165-57.us-west-2.compute.amazonaws.com:3000/profile/' + userid,
