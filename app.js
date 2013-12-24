@@ -7,8 +7,8 @@ app.use(express.bodyParser({uploadDir:'./public/avatars'}));
 var userProvider = require('./UserProvider')
 var userProvider= new userProvider();
 
-app.get('/test', function(req, res){
-	res.json({RESULT_CODE:'1', MESSAGE:'Server running'});
+app.post('/test', function(req, res){
+	res.json({RESULT_CODE:'1', MESSAGE:'Server running'}); 
 });
 
 app.post('/signup', function(req, res){
@@ -78,8 +78,9 @@ app.post('/update/new', function(req, res)	{
 	var categories = req.body.categories;
 	var footnote = req.body.footnote;
 	var created_at = new Date();
+	var published = req.body.published;
 
-	userProvider.createUpdate(uid, title, sub_title, content, tags, categories, footnote, created_at, function(response)	{
+	userProvider.createUpdate(uid, title, sub_title, content, tags, categories, footnote, created_at, published, function(response)	{
 		res.json(response);
 	});
 });
@@ -131,6 +132,38 @@ app.post('/like', function(req, res)	{
 	var uid = req.body.uid;
 
 	userProvider.updateLike(id, uid, function(response)	{
+		res.json(response);
+	});
+});
+
+app.get('/search/:keystring', function(req, res)	{
+	var keystring = req.params.keystring;
+
+	userProvider.getSearch(keystring, function(response)	{
+		res.json(response);
+	});
+});
+
+app.post('/addUid', function(req, res)	{
+	var uid = req.body.uid;
+	var adduid = req.body.adduid;
+
+	userProvider.addUid(uid, adduid, function(response)	{
+		res.json(response);
+	});
+});
+
+app.delete('/update', function(req, res)	{
+	var uid = req.body.uid;
+	var id = req.body.id;
+
+	userProvider.deleteUpdate(uid, id, function(response)	{
+		res.json(response);
+	});
+});
+
+app.get('/shuffle', function(req, res)	{
+	userProvider.shuffle(function(response)	{
 		res.json(response);
 	});
 });
