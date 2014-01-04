@@ -21,6 +21,7 @@ var User = new Schema({
 ,	firstname: {type: String, default: ''}
 ,	lastname: {type: String, default: ''}
 ,	avatar: {type: String, default: ''}
+,	media: [{type: String}]
 });
 
 mongoose.model('User', User);
@@ -56,6 +57,14 @@ var Post = new Schema({
 mongoose.model('Post', Post);
 var Post = mongoose.model('Post');
 
+var Advt = new Schema({
+	url: String
+,	advt: String
+,	clicks : {type: Number, default:0}
+});
+
+mongoose.model('Advt', Advt);
+var Advt = mongoose.model('Advt');
 
 UserProvider = function(){};
 
@@ -598,6 +607,117 @@ UserProvider.prototype.shuffle = function(callback)	{
 		}
 	});
 }
+
+UserProvider.prototype.addMedia = function(uid, media_name, callback)	{
+	User.findOne({uid:uid}, function(error, result)	{
+		if(error){
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else if(result == null)	{
+			callback({RESULT_CODE:'-1', MESSAGE:'User does not exist'});
+		}
+		else	{
+			result.media.push(media_name);
+			result.save(function(error, result)	{
+				if(error){
+					callback({RESULT_CODE:'-1', MESSAGE:'System error on push to user'});
+				}
+				else
+				{
+					callback({RESULT_CODE:'1', MESSAGE:'Media updated', DATA:media_name});
+				}
+			});
+		}
+	});
+}
+
+UserProvider.prototype.getMedia = function(uid, callback)	{
+	User.findOne({uid:uid}, function(err, result)	{
+		if(err){
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else if(result == null)	{
+			callback({RESULT_CODE:'-1', MESSAGE:'User does not exist'});
+		}
+		else
+		{
+			callback({RESULT_CODE:'1', DATA: result.media});
+		}
+	});
+}
+
+UserProvider.prototype.addAdvt = function(url, advt_name, callback)	{
+	var newAdvt = new Advt({ url: url, advt:advt_name});
+	newAdvt.save(function(err, result)	{
+		if(err)
+		{
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else
+		{
+			callback({RESULT_CODE:'1', MESSAGE:'Advt created'});
+		} 
+	});
+}
+
+UserProvider.prototype.getAdvt = function(callback)	{
+	Advt.find({}, function(err, result)	{
+		if(err){
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else
+		{
+			var total = result.length;
+			var randomAdvt = Math.floor(Math.random()*total);
+
+			Advt.find({}, {clicks:0}, {skip:randomAdvt, limit:1}, function(err, result)	{
+				if(err){
+					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+				}
+				else
+				{
+					callback({RESULT_CODE:'1', DATA: result[0]});
+				}
+			});
+		}
+	});
+}
+
+UserProvider.prototype.addClick = function(id, callback)	{
+	Advt.findById(id, function(err, result)	{
+		if(err){
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else if(result == null)	{
+			callback({RESULT_CODE:'-1', MESSAGE:'Advt does not exist'});
+		}
+		else
+		{
+			result.clicks++;
+			result.save(function(err)	{
+				if(err){
+					callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+				}
+				else	{
+					callback({RESULT_CODE:'1', MESSAGE:'Click updated'});
+				}
+			});
+		}
+	});
+}
+
+UserProvider.prototype.getAdvtSummary = function(callback)	{
+	Advt.find({}, {clicks:1}, function(err, result)	{
+		if(err){
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else
+		{
+			callback({RESULT_CODE:'1', DATA: result});
+		}
+	});
+}
+
 
 function userProfile(uid, callback)	{
 	User.find({uid:{$in:uid}}, {uid:1, username:1, avatar:1}, function(err, result)	{

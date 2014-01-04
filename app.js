@@ -168,6 +168,56 @@ app.get('/shuffle', function(req, res)	{
 	});
 });
 
+app.post('/media', function(req, res)	{
+	var uid = req.body.uid;
+	var tmp_path = req.files.media.path;
+	var media_path = tmp_path.split('/');
+	var media_name = media_path[2];
+
+	userProvider.addMedia(uid, media_name, function(response)	{
+		res.json(response);
+	});
+});
+
+app.get('/media/:uid', function(req, res)	{
+	var uid = req.params.uid;
+
+	userProvider.getMedia(uid, function(response)	{
+		res.json(response);
+	});
+});
+
+app.post('/advt', function(req, res)	{
+	var url = req.body.url;
+	var tmp_path = req.files.advt.path;
+	var advt_path = tmp_path.split('/');
+	var advt_name = advt_path[2];
+
+	userProvider.addAdvt(url, advt_name, function(response)	{
+		res.json(response);
+	});
+});
+
+app.get('/advt', function(req, res)	{
+	userProvider.getAdvt(function(response)	{
+		res.json(response);
+	});
+});
+
+app.post('/click', function(req, res)	{
+	var id = req.body._id;
+
+	userProvider.addClick(id, function(response)	{
+		res.json(response);
+	});
+});
+
+app.get('/advtSummary', function(req, res)	{
+	userProvider.getAdvtSummary(function(response)	{
+		res.json(response);
+	});
+});
+
 app.listen(3000);
 
 module.exports = app;
