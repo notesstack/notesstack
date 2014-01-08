@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/notesstack');
 var Schema = mongoose.Schema
 	, ObjectId = Schema.ObjectId;
 
-var User = new Schema({
+var UserSchema = new Schema({
 	email: String
 ,	uid: [String]
 ,	username: String
@@ -24,8 +24,7 @@ var User = new Schema({
 ,	media: [{type: String}]
 });
 
-mongoose.model('User', User);
-var User = mongoose.model('User');
+var User = mongoose.model('User', UserSchema);
 
 var Comments = new Schema({
     uid     : String
@@ -33,7 +32,7 @@ var Comments = new Schema({
   , created_at : Date
 });
 
-var Post = new Schema({
+var PostSchema = new Schema({
 	uid	: String
 	, title	: String
 	, sub_title : String
@@ -54,17 +53,15 @@ var Post = new Schema({
 	, pages : Number
 });
 
-mongoose.model('Post', Post);
-var Post = mongoose.model('Post');
+var Post = mongoose.model('Post', PostSchema);
 
-var Advt = new Schema({
+var AdvtSchema = new Schema({
 	url: String
 ,	advt: String
 ,	clicks : {type: Number, default:0}
 });
 
-mongoose.model('Advt', Advt);
-var Advt = mongoose.model('Advt');
+var Advt = mongoose.model('Advt', AdvtSchema);
 
 UserProvider = function(){};
 
@@ -432,7 +429,6 @@ UserProvider.prototype.getSearch = function(keystring, callback)	{
 	});
 }
 
-
 UserProvider.prototype.updateComment = function(id, uid, comment, created_at, callback)	{
 	User.findOne({uid: uid}, function(err, result)	{
 		if(err){
@@ -718,6 +714,27 @@ UserProvider.prototype.getAdvtSummary = function(callback)	{
 	});
 }
 
+UserProvider.prototype.getSummary = function(callback)	{
+	Post.find({published:true}, {}, function(err, result)	{
+		if(err){
+			callback({RESULT_CODE:'-1', MESSAGE:'System error'});
+		}
+		else
+		{
+			var uids = {};
+			result.forEach(function(user)	{
+				if(uids[user.uid])	{
+					uids[user.uid]++;
+				}
+				else	{
+					uids[user.uid] = 0;
+					uids[user.uid]++;
+				}
+			});
+			callback({RESULT_CODE:'1', DATA:uids});
+		}
+	});
+}
 
 function userProfile(uid, callback)	{
 	User.find({uid:{$in:uid}}, {uid:1, username:1, avatar:1}, function(err, result)	{
@@ -728,7 +745,7 @@ function userProfile(uid, callback)	{
 		{
 			var profiledata = {};
 			result.forEach(function(user)	{
-				profiledata[user.uid] = {username:user.username, avatar:user.avatar};
+				profiledata[user.uid[0]] = {username:user.username, avatar:user.avatar};
 			});				
 			callback(null, profiledata);
 		}

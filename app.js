@@ -1,4 +1,5 @@
 var express = require('express');
+var phantom = require('phantom');
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
@@ -214,6 +215,27 @@ app.post('/click', function(req, res)	{
 
 app.get('/advtSummary', function(req, res)	{
 	userProvider.getAdvtSummary(function(response)	{
+		res.json(response);
+	});
+});
+
+app.post('/pdf', function(req, res)	{
+	phantom.create(function(ph){
+		ph.createPage(function(page) {
+		  page.open(req.body.page, function(status) {
+				var randomNumber = Math.floor(Math.random()*10000);
+				var randomPdf = './public/pdf/' + randomNumber + '.pdf';
+	      page.render(randomPdf, function(){
+					res.json({RESULT_CODE:'1', MESSAGE:'Pdf Created', PAGE:randomNumber});
+		      ph.exit();
+		    });
+		  });
+		});
+	});
+});
+
+app.get('/summary', function(req, res)	{
+	userProvider.getSummary(function(response)	{
 		res.json(response);
 	});
 });
